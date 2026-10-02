@@ -1,0 +1,8 @@
+{
+  "functions": {
+    "api/ocr.js": { "maxDuration": 60 },
+    "api/register.js": { "maxDuration": 30 },
+    "api/readings.js": { "maxDuration": 30 },
+    "api/health.js": { "maxDuration": 15 }
+  }
+}

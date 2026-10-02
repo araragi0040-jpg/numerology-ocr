@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#f5efe6" />
+  <title>数秘鑑定記録 v001</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">NUMEROLOGY RECORD</p>
+      <h1>数秘鑑定記録 <span>v001</span></h1>
+    </div>
+    <div id="statusDot" class="status" title="接続状態"><i></i><span>確認中</span></div>
+  </header>
+
+  <main class="shell">
+    <nav class="tabs" aria-label="画面切替">
+      <button class="tab active" data-tab="capture">新規登録</button>
+      <button class="tab" data-tab="list">鑑定一覧</button>
+    </nav>
+
+    <section id="capturePanel" class="panel active">
+      <div id="stepUpload" class="step active">
+        <div class="hero-card">
+          <div class="hero-icon">✦</div>
+          <h2>手書き鑑定記録を読み取る</h2>
+          <p>紙全体が入るように撮影してください。AIで読み取り後、必ず確認画面を表示します。</p>
+          <label class="camera-button">
+            <input id="cameraInput" type="file" accept="image/jpeg,image/png,image/webp" capture="environment" />
+            <span class="camera-mark">📷</span>
+            <strong>カメラで撮影</strong>
+          </label>
+          <label class="secondary-button">
+            <input id="galleryInput" type="file" accept="image/jpeg,image/png,image/webp" />
+            写真から選択
+          </label>
+          <div class="tips">
+            <span>✓ 影を減らす</span><span>✓ 真上から撮る</span><span>✓ 紙の四隅を入れる</span>
+          </div>
+        </div>
+      </div>
+
+      <div id="stepProcessing" class="step">
+        <div class="processing-card">
+          <div class="spinner"></div>
+          <h2>AIで読み取り中…</h2>
+          <p id="processingText">画像を保存しています</p>
+          <div class="progress"><i id="progressBar"></i></div>
+        </div>
+      </div>
+
+      <div id="stepReview" class="step">
+        <div class="review-head">
+          <div>
+            <p class="eyebrow">REVIEW</p>
+            <h2>読み取り結果を確認</h2>
+            <p>誤読した箇所だけ直して「確定登録」してください。</p>
+          </div>
+          <button id="retryButton" class="ghost-button">別の画像を読む</button>
+        </div>
+
+        <div class="review-grid">
+          <aside class="image-pane">
+            <img id="previewImage" alt="鑑定記録の撮影画像" />
+            <a id="driveImageLink" href="#" target="_blank" rel="noopener">Driveの原本を開く ↗</a>
+          </aside>
+
+          <form id="reviewForm" class="form-pane">
+            <div id="warningBox" class="warning-box hidden"></div>
+
+            <div class="form-section">
+              <h3>基本情報</h3>
+              <div class="field-grid two">
+                <label>氏名<input name="name_ja" type="text" /></label>
+                <label>ふりがな<input name="name_kana" type="text" /></label>
+                <label>ローマ字<input name="roman_name" type="text" /></label>
+                <label>生年月日<input name="birth_date" type="date" /></label>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h3>数秘</h3>
+              <div class="field-grid two compact">
+                <label>宿命数<input name="shukumei_number" type="number" min="0" max="99" inputmode="numeric" /></label>
+                <label>運命数<input name="unmei_number" type="number" min="0" max="99" inputmode="numeric" /></label>
+              </div>
+              <label>姓名計算メモ<textarea name="name_calculation" rows="3"></textarea></label>
+            </div>
+
+            <div class="form-section">
+              <h3>鑑定内容</h3>
+              <label>宿命数<textarea name="shukumei_description" rows="4"></textarea></label>
+              <label>運命数<textarea name="unmei_description" rows="4"></textarea></label>
+              <div class="field-grid two">
+                <label>長所<textarea name="strengths" rows="5"></textarea></label>
+                <label>短所<textarea name="weaknesses" rows="5"></textarea></label>
+                <label>愛・恋愛<textarea name="love" rows="5"></textarea></label>
+                <label>仕事<textarea name="work" rows="5"></textarea></label>
+              </div>
+              <label>備考<textarea name="notes" rows="3"></textarea></label>
+            </div>
+
+            <div class="form-section">
+              <div class="section-title-row">
+                <h3>その他の項目</h3>
+                <button id="addOtherButton" type="button" class="mini-button">＋追加</button>
+              </div>
+              <div id="otherSections"></div>
+            </div>
+
+            <details class="raw-details">
+              <summary>AI全文文字起こしを確認</summary>
+              <label><textarea name="raw_transcription" rows="10"></textarea></label>
+            </details>
+
+            <button id="registerButton" class="register-button" type="submit">この内容で確定登録</button>
+          </form>
+        </div>
+      </div>
+
+      <div id="stepDone" class="step">
+        <div class="done-card">
+          <div class="done-mark">✓</div>
+          <h2>登録しました</h2>
+          <p id="doneText">鑑定記録をスプレッドシートに保存しました。</p>
+          <div class="done-actions">
+            <button id="newCaptureButton" class="register-button">続けて登録</button>
+            <button id="openListButton" class="ghost-button">鑑定一覧を見る</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="listPanel" class="panel">
+      <div class="list-head">
+        <div>
+          <p class="eyebrow">RECORDS</p>
+          <h2>鑑定一覧</h2>
+        </div>
+        <button id="reloadListButton" class="ghost-button">再読み込み</button>
+      </div>
+      <div class="search-row">
+        <input id="searchInput" type="search" placeholder="氏名・ローマ字・生年月日で検索" />
+        <span id="recordCount">0件</span>
+      </div>
+      <div id="listMessage" class="empty-message">読み込み中…</div>
+      <div id="recordList" class="record-list"></div>
+    </section>
+  </main>
+
+  <dialog id="detailDialog" class="detail-dialog">
+    <button id="closeDialog" class="dialog-close" aria-label="閉じる">×</button>
+    <div id="detailContent"></div>
+  </dialog>
+
+  <div id="toast" class="toast"></div>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
