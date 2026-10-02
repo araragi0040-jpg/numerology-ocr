@@ -109,7 +109,7 @@ async function callGemini({ base64, mimeType }) {
         temperature: 0,
         responseFormat: {
           text: {
-            mimeType: 'application/json',
+            mimeType: 'APPLICATION_JSON',
             schema: OCR_SCHEMA
           }
         }
